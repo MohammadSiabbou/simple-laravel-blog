@@ -64,6 +64,16 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
                         </div>
                     </div>
                 </div>
+                <div
+                    v-if="
+                        typeof ActiveArticles.data == 'undefined' ||
+                        ActiveArticles.data.length === 0
+                    "
+                >
+                    <div class="bg-gray-600 mb-2 rounded-md p-5 text-white">
+                        No Articles Here Yet!
+                    </div>
+                </div>
                 <div v-if="isLoading">Working on it.... Please Wait !</div>
                 <div v-else class="grid grid-cols-3 gap-3">
                     <div
