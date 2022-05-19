@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Session;
 
 class ArticlesController extends Controller
 {
@@ -38,10 +39,11 @@ class ArticlesController extends Controller
                 'content' => $request->content,
                 'createdby' => Auth::id()
             ]);
+            Session::flash('article-created', 'Your Article Has Been Created Successfully');
+            return Redirect::to('/articles');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
+            echo "Sorry We Have an unexpected Error !";
         }
-        return Redirect::route('new-article', $article);
     }
 
     /**
@@ -63,7 +65,8 @@ class ArticlesController extends Controller
     public function show()
     {
         return Inertia::render('Articles', [
-            'articles' => Articles::orderBy('id', 'desc')->paginate(5),
+            'articles' => Articles::orderBy('id', 'desc')->paginate(6),
+            "articleCreated" => Session::has('article-created') ? Session::get('article-created') : null
         ]);
     }
 

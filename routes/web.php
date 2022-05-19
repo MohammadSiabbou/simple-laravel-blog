@@ -4,7 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ArticlesController;
-
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,12 +18,11 @@ use App\Http\Controllers\ArticlesController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    if (Auth::check()) {
+        return Redirect::to("/articles");
+    } else {
+        return Redirect::to("/register");
+    }
 });
 
 Route::middleware([
@@ -30,9 +30,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [ArticlesController::class, 'show'])->name('dashboard');
     // show old articles
     Route::get('/articles', [ArticlesController::class, 'show'])->name("articles");
     // creat new article

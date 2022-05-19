@@ -20,9 +20,9 @@ import JetInput from '@/Jetstream/Input.vue';
         <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div class="max-w-md w-full space-y-8">
                 <div>
-                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">New Article 2 !</h2>
+                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Creat a New Article !</h2>
                 </div>
-                <div v-if="errors.title || errors.content" class="bg-red-500 p-4 rounded-lg">
+                <div v-if="errors !== undefined && (errors.title || errors.content)" class="bg-red-500 p-4 rounded-lg">
                     <div v-if="errors.title" class="text-white">{{ errors.title }}</div>
                     <div v-if="errors.content" class="text-white">{{ errors.content }}</div>
                 </div>

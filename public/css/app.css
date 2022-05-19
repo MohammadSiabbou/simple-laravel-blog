@@ -980,6 +980,12 @@ select {
 .z-40 {
   z-index: 40;
 }
+.order-3 {
+  order: 3;
+}
+.order-2 {
+  order: 2;
+}
 .col-span-6 {
   grid-column: span 6 / span 6;
 }
@@ -1070,6 +1076,12 @@ select {
 }
 .mb-1 {
   margin-bottom: 0.25rem;
+}
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 .block {
   display: block;
@@ -1187,6 +1199,9 @@ select {
 }
 .flex-1 {
   flex: 1 1 0%;
+}
+.flex-shrink-0 {
+  flex-shrink: 0;
 }
 .shrink-0 {
   flex-shrink: 0;
@@ -1468,6 +1483,14 @@ select {
 .bg-green-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+.bg-green-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+}
+.bg-indigo-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 48 163 / var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
@@ -1896,6 +1919,22 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(22 101 52 / var(--tw-bg-opacity));
 }
+.hover\:bg-indigo-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(238 242 255 / var(--tw-bg-opacity));
+}
+.hover\:bg-indigo-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+}
+.hover\:bg-green-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(240 253 244 / var(--tw-bg-opacity));
+}
+.hover\:bg-green-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+}
 .hover\:text-gray-500:hover {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
@@ -2033,6 +2072,10 @@ select {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(34 197 94 / var(--tw-ring-opacity));
 }
+.focus\:ring-white:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity));
+}
 .focus\:ring-opacity-50:focus {
   --tw-ring-opacity: 0.5;
 }
@@ -2119,6 +2162,14 @@ select {
 }
 @media (min-width: 640px) {
 
+  .sm\:order-2 {
+    order: 2;
+  }
+
+  .sm\:order-3 {
+    order: 3;
+  }
+
   .sm\:col-span-4 {
     grid-column: span 4 / span 4;
   }
@@ -2192,6 +2243,10 @@ select {
 
   .sm\:w-full {
     width: 100%;
+  }
+
+  .sm\:w-auto {
+    width: auto;
   }
 
   .sm\:max-w-md {
@@ -2333,8 +2388,16 @@ select {
     margin-top: 0px;
   }
 
+  .md\:inline {
+    display: inline;
+  }
+
   .md\:grid {
     display: grid;
+  }
+
+  .md\:hidden {
+    display: none;
   }
 
   .md\:grid-cols-3 {
