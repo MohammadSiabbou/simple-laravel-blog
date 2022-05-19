@@ -62,10 +62,17 @@ class ArticlesController extends Controller
      * @param  \App\Models\Articles  $articles
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Request $request)
     {
+        $articles = Articles::orderBy('id', 'desc')->paginate(6);
+        // return the json response
+        if ($request->get("request") && $request->get("request") == "api") {
+            return response()->json($articles);
+        }
+        // return the view on the first load
         return Inertia::render('Articles', [
-            'articles' => Articles::orderBy('id', 'desc')->paginate(6),
+            'articles' => $articles,
+            'loadedPages' => [$articles->currentPage()],
             "articleCreated" => Session::has('article-created') ? Session::get('article-created') : null
         ]);
     }

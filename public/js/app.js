@@ -19408,8 +19408,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 var __default__ = {
+  data: function data() {
+    return {
+      linksLength: 0
+    };
+  },
   props: {
-    links: Array
+    links: Array,
+    chnageHndler: {
+      type: Function
+    },
+    activelink: Number
+  },
+  mounted: function mounted() {
+    this.linksLength = this.links.length;
   }
 };
 
@@ -20748,18 +20760,54 @@ var __default__ = {
   },
   data: function data() {
     return {
-      isShown: true
+      activepage: 1,
+      isShown: true,
+      isLoading: false,
+      loadedPages: [],
+      ActiveArticles: []
     };
   },
   // actions
   methods: {
     hide: function hide() {
+      // hide the alert message
       this.isShown = false;
+    },
+    articlesupdater: function articlesupdater(data) {
+      // update the articles
+      this.articles = data;
+    },
+    addnewpage: function addnewpage(url) {
+      var _this = this;
+
+      // change page without reloading old data
+      var convertedurl = new URL(url);
+      var page = convertedurl.searchParams.get("page");
+      this.activepage = page;
+
+      if (!this.loadedPages[page]) {
+        this.isLoading = true;
+        fetch(url + "&request=api").then(function (response) {
+          return response.json();
+        }).then(function (data) {
+          _this.loadedPages[page] = data;
+          _this.ActiveArticles = data;
+          _this.isLoading = false;
+        })["catch"](function (err) {
+          return console.error(err);
+        });
+      } else {
+        this.ActiveArticles = this.loadedPages[page];
+      }
     }
   },
   props: {
     articles: Object,
     articleCreated: String
+  },
+  mounted: function mounted() {
+    this.loadedPages[this.articles.current_page] = this.articles;
+    this.ActiveArticles = this.articles;
   }
 };
 
@@ -22161,26 +22209,30 @@ var _hoisted_2 = {
   "class": "mb-1 flex flex-wrap justify-center"
 };
 var _hoisted_3 = ["innerHTML"];
+var _hoisted_4 = ["onClick", "href", "innerHTML"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return $props.links.length > 3 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.links, function (link, p) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
       key: p
-    }, [link.url === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    }, [link.url == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: 0,
-      "class": "mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded",
-      innerHTML: link.label
-    }, null, 8
-    /* PROPS */
-    , _hoisted_3)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Link"], {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([p == 0 || p == $data.linksLength ? 'hidden' : '', "mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded"]),
+      innerHTML: $data.linksLength + ' ' + link.label
+    }, null, 10
+    /* CLASS, PROPS */
+    , _hoisted_3)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
       key: 1,
-      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-green-800 focus:border-green-500 focus:text-green-500", {
-        'bg-green-700 text-white': link.active
+      onClick: function onClick($event) {
+        return $props.chnageHndler(link.url);
+      },
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([p == 0 || p == $data.linksLength - 1 ? 'hidden' : '', "mr-1 cursor-pointer mb-1 px-4 py-3 text-sm leading-4 border rounded hover:text-white hover:bg-green-800 focus:border-green-500 focus:text-green-500", {
+        'bg-green-700 text-white': p == $props.activelink
       }]),
       href: link.url,
       innerHTML: link.label
-    }, null, 8
-    /* PROPS */
-    , ["class", "href", "innerHTML"]))], 64
+    }, null, 10
+    /* CLASS, PROPS */
+    , _hoisted_4))], 64
     /* STABLE_FRAGMENT */
     );
   }), 128
@@ -24406,12 +24458,16 @@ var _hoisted_15 = {
   "class": "-mr-1 flex p-2 rounded-md hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
 };
 var _hoisted_16 = {
-  "class": "grid grid-cols-3 gap-3"
+  key: 1
 };
 var _hoisted_17 = {
-  "class": "text-lg font-bold"
+  key: 2,
+  "class": "grid grid-cols-3 gap-3"
 };
 var _hoisted_18 = {
+  "class": "text-lg font-bold"
+};
+var _hoisted_19 = {
   "class": "mt-4 text-sm leading-4 text-zinc-700"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -24458,23 +24514,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return $options.hide();
         }),
         "class": "h-6 w-6 text-white"
-      }, " × ")])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.articles.data, function (article) {
+      }, " × ")])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.isLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, "Working on it.... Please Wait !")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.ActiveArticles.data, function (article) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: article.id,
           "class": "bg-white p-5 rounded-lg"
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(article.title), 1
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(article.title), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(article.content.length > 230 ? article.content.slice(0, 220) + "...." : article.content), 1
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(article.content.length > 230 ? article.content.slice(0, 220) + "...." : article.content), 1
         /* TEXT */
         )]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Pagination"], {
+      ))]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Pagination"], {
         "class": "mt-6",
+        chnageHndler: $options.addnewpage,
+        activelink: $data.activepage,
         links: $props.articles.links
       }, null, 8
       /* PROPS */
-      , ["links"])])];
+      , ["chnageHndler", "activelink", "links"])])];
     }),
     _: 1
     /* STABLE */
