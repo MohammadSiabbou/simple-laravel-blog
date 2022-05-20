@@ -17,7 +17,7 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
             </h2>
         </template>
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-2">
                 <div
                     v-if="articleCreated !== null && isShown"
                     class="bg-green-600 mb-2 rounded-md"
@@ -78,14 +78,19 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
                         No Articles Here Yet!
                     </div>
                 </div>
-                <div v-else class="grid grid-cols-3 gap-3">
+                <div
+                    v-else
+                    class="grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+                >
                     <div
                         v-for="article in getActiveArticles.data"
                         :key="article.id"
                         class="bg-white p-5 rounded-lg"
                     >
                         <h3 class="text-lg font-bold">{{ article.title }}</h3>
-                        <p class="mt-4 text-sm leading-4 text-zinc-700">
+                        <p
+                            class="mt-4 text-sm leading-4 text-zinc-700 truncate"
+                        >
                             {{
                                 article.content.length > 230
                                     ? article.content.slice(0, 220) + "...."

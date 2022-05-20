@@ -24661,7 +24661,7 @@ var _hoisted_3 = {
   "class": "py-12"
 };
 var _hoisted_4 = {
-  "class": "max-w-7xl mx-auto sm:px-6 lg:px-8"
+  "class": "max-w-7xl mx-auto sm:px-6 lg:px-8 p-2"
 };
 var _hoisted_5 = {
   key: 0,
@@ -24711,13 +24711,13 @@ var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 var _hoisted_18 = [_hoisted_17];
 var _hoisted_19 = {
   key: 3,
-  "class": "grid grid-cols-3 gap-3"
+  "class": "grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
 };
 var _hoisted_20 = {
   "class": "text-lg font-bold"
 };
 var _hoisted_21 = {
-  "class": "mt-4 text-sm leading-4 text-zinc-700"
+  "class": "mt-4 text-sm leading-4 text-zinc-700 truncate"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
