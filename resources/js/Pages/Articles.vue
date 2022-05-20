@@ -12,7 +12,7 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
                     :href="route('new-article')"
                     class="text-sm float-right font-semibold bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
                 >
-                    Add A New Article
+                    Add A New Article {{ getTest }}
                 </Link>
             </h2>
         </template>
@@ -64,20 +64,23 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
                         </div>
                     </div>
                 </div>
+                <div v-if="getLoadingStatus">
+                    Working on it.... Please Wait !
+                </div>
                 <div
                     v-if="
-                        typeof ActiveArticles.data == 'undefined' ||
-                        ActiveArticles.data.length === 0
+                        (typeof getActiveArticles.data == 'undefined' ||
+                            getActiveArticles.data.length === 0) &&
+                        !getLoadingStatus
                     "
                 >
                     <div class="bg-gray-600 mb-2 rounded-md p-5 text-white">
                         No Articles Here Yet!
                     </div>
                 </div>
-                <div v-if="isLoading">Working on it.... Please Wait !</div>
                 <div v-else class="grid grid-cols-3 gap-3">
                     <div
-                        v-for="article in ActiveArticles.data"
+                        v-for="article in getActiveArticles.data"
                         :key="article.id"
                         class="bg-white p-5 rounded-lg"
                     >
@@ -94,8 +97,8 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
             </div>
             <pagination
                 class="mt-6"
-                :chnageHndler="addnewpage"
-                :activelink="activepage"
+                :chnageHndler="this.getPageArticles"
+                :activelink="getActivePage"
                 :links="articles.links"
             />
         </div>
@@ -103,56 +106,36 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 </template>
 <script>
 import Pagination from "@/Components/Pagination";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
     components: {
         Pagination,
     },
     data() {
         return {
-            activepage: 1,
             isShown: true,
-            isLoading: false,
-            loadedPages: [],
-            ActiveArticles: [],
         };
     },
     // actions
+    computed: mapGetters([
+        "getActiveArticles",
+        "getActivePage",
+        "getLoadingStatus",
+    ]),
     methods: {
+        ...mapActions(["getPageArticles"]),
         hide() {
             // hide the alert message
             this.isShown = false;
-        },
-        articlesupdater(data) {
-            // update the articles
-            this.articles = data;
-        },
-        addnewpage(url) {
-            // change page without reloading old data
-            const convertedurl = new URL(url);
-            const page = convertedurl.searchParams.get("page");
-            this.activepage = page;
-            if (!this.loadedPages[page]) {
-                this.isLoading = true;
-                fetch(url + "&request=api")
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.loadedPages[page] = data;
-                        this.ActiveArticles = data;
-                        this.isLoading = false;
-                    })
-                    .catch((err) => console.error(err));
-            } else {
-                this.ActiveArticles = this.loadedPages[page];
-            }
         },
     },
     props: {
         articles: Object,
         articleCreated: String,
     },
-    mounted() {
-        this.loadedPages[this.articles.current_page] = this.articles;
-        this.ActiveArticles = this.articles;
+    created() {
+        this.getPageArticles({ url: this.articles.first_page_url });
     },
 };
 </script>

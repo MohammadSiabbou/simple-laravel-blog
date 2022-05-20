@@ -12,9 +12,11 @@ import { Link } from "@inertiajs/inertia-vue3";
                     v-html="linksLength + ' ' + link.label"
                 />
                 <span
-                    @click="chnageHndler(link.url)"
+                    @click="chnageHndler({ url: link.url })"
                     v-else
-                    v-bind:class="p == 0 || p == (linksLength - 1) ? 'hidden' : ''"
+                    v-bind:class="
+                        p == 0 || p == linksLength - 1 ? 'hidden' : ''
+                    "
                     class="mr-1 cursor-pointer mb-1 px-4 py-3 text-sm leading-4 border rounded hover:text-white hover:bg-green-800 focus:border-green-500 focus:text-green-500"
                     :class="{ 'bg-green-700 text-white': p == activelink }"
                     :href="link.url"
